@@ -30,14 +30,29 @@ class Module:
         return list(m.values())
 
     def train(self) -> None:
-        "Set the mode of this module and all descendent modules to `train`."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        """
+        Set the mode of this module and all descendent modules to `train`.
+
+        Returns:
+            None
+        """
+        if not self.training:
+            self.training = True
+            for module in self.modules():
+                module.train()
 
     def eval(self) -> None:
-        "Set the mode of this module and all descendent modules to `eval`."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        """
+        Set the mode of this module and all descendent modules to `eval`.
+
+        Returns:
+            None
+        """
+
+        if self.training:
+            self.training = False
+            for module in self.modules():
+                module.eval()
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """
@@ -47,13 +62,26 @@ class Module:
         Returns:
             The name and `Parameter` of each ancestor parameter.
         """
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+
+        # Get all the parameters of this module
+        params = [(k, v) for k, v in self.__dict__["_parameters"].items()]
+
+        # Get all the parameters of the children
+        for name, module in self.__dict__["_modules"].items():
+            for k, v in module.named_parameters():
+                params.append((name + "." + k, v))
+
+        return params
 
     def parameters(self) -> Sequence[Parameter]:
-        "Enumerate over all the parameters of this module and its descendents."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        """
+        Enumerate over all the parameters of this module and its descendents.
+
+        Returns:
+            Sequence[Parameter]: All parameters of this module and its descendents.
+        """
+
+        return [v for _, v in self.named_parameters()]
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """

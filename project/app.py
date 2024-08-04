@@ -13,6 +13,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 module_num = args.module_num
+print(module_num)
 hide_function_defs = args.hide_function_defs
 
 st.set_page_config(page_title="interactive minitorch")
